@@ -55,9 +55,10 @@ export default function EmailSignUpForm() {
       } catch (storageErr) {
         console.warn('Could not store email in localStorage:', storageErr);
       }
-    } catch (err: any) {
+    } catch (err: Error | unknown) {
       console.error('Error submitting email:', err);
-      setError(err.message || 'Unable to submit your email at this time. Please try again later.');
+      const errorMessage = err instanceof Error ? err.message : 'Unable to submit your email at this time. Please try again later.';
+      setError(errorMessage);
       
       // Store in localStorage as fallback if API fails
       try {
@@ -82,7 +83,7 @@ export default function EmailSignUpForm() {
         <div className="flex flex-col items-center justify-center text-center">
           <CheckCircle className="h-12 w-12 text-green-500 mb-4" />
           <h3 className="text-xl font-medium text-white mb-2">Thank you for signing up!</h3>
-          <p className="text-gray-400">We'll keep you updated on our progress.</p>
+          <p className="text-gray-400">We&apos;ll keep you updated on our progress.</p>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="flex items-center gap-2">
