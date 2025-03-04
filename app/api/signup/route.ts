@@ -16,10 +16,16 @@ export async function POST(request: Request) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-    if (!supabaseUrl || !supabaseServiceKey) {
-      console.error('Missing Supabase credentials');
+    // Enhanced error logging
+    const missingVars = [];
+    if (!supabaseUrl) missingVars.push('NEXT_PUBLIC_SUPABASE_URL');
+    if (!supabaseServiceKey) missingVars.push('SUPABASE_SERVICE_ROLE_KEY');
+
+    if (missingVars.length > 0) {
+      const errorMsg = `Missing Supabase credentials: ${missingVars.join(', ')}`;
+      console.error(errorMsg);
       return NextResponse.json(
-        { error: 'Server configuration error' },
+        { error: 'Server configuration error', details: errorMsg },
         { status: 500 }
       );
     }
@@ -27,13 +33,24 @@ export async function POST(request: Request) {
     // Log the credentials being used (without revealing full key)
     console.log('Using Supabase URL:', supabaseUrl);
     console.log('Service key available:', !!supabaseServiceKey);
+    if (supabaseServiceKey) {
+      // Log first and last few characters of the key to help with debugging
+      const keyStart = supabaseServiceKey.substring(0, 4);
+      const keyEnd = supabaseServiceKey.substring(supabaseServiceKey.length - 4);
+      console.log(`Service key format check: ${keyStart}...${keyEnd}`);
+    }
 
-    const supabase = createClient(supabaseUrl, supabaseServiceKey, {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false
+    // At this point, we've verified that both values exist
+    const supabase = createClient(
+      supabaseUrl as string, 
+      supabaseServiceKey as string, 
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
       }
-    });
+    );
 
     // Insert the email into the testflight-signups table
     const { error } = await supabase
