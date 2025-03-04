@@ -1,8 +1,9 @@
 import { CheckCircle } from "lucide-react";
 import { GradientBackground } from "@/components/ui/gradient-background";
 import Image from "next/image";
-import SignUpButton from "@/components/SignUpButton";
+import EmailSignUpForm from "@/components/EmailSignUpForm";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import EmailAdmin from "@/components/EmailAdmin";
 
 export default function Home() {
   return (
@@ -29,12 +30,10 @@ export default function Home() {
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-4 text-white">peek</h1>
 
             {/* Tagline */}
-            <p className="text-xl md:text-2xl text-gray-400 mb-12">see exactly where your money goes—in just 2 minutes</p>
+            <p className="text-xl md:text-2xl text-gray-400 mb-8">see exactly where your money goes—in just 2 minutes</p>
 
-            <div className="w-full max-w-sm mx-auto">
-              <div className="flex justify-center">
-                <SignUpButton />
-              </div>
+            <div className="w-full max-w-md mx-auto">
+              <EmailSignUpForm />
               <div className="mt-4 flex items-center justify-center gap-1 text-sm text-gray-500">
                 <CheckCircle className="h-4 w-4 text-white/70" />
                 <span>
@@ -103,7 +102,7 @@ export default function Home() {
                 <WhatsAppButton />
               </div>
             </div>
-        </div>
+          </div>
         </section>
       </main>
       <footer className="border-t border-gray-800/30 bg-black/30 z-10">
@@ -113,6 +112,9 @@ export default function Home() {
           </div>
         </div>
       </footer>
+      
+      {/* Admin Panel */}
+      <EmailAdmin />
     </div>
   );
 }
